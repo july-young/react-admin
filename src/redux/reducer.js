@@ -5,10 +5,14 @@ import {
   SET_HEAD_TITLE,
   RECEIVE_USER,
   SHOW_ERROR_MSG,
-  RESET_USER
+  RESET_USER,
+  REQ_MENU_LIST
 } from './action-types'
+import {reqMenuTree} from '../api/index'
 
 import storageUtils  from "../utils/storageUtils"
+
+import { resolve } from 'path'
 const initHeadTitle = ''
 
 function headTitle(state = initHeadTitle, action) {
@@ -35,6 +39,16 @@ function user(state = initUser, action) {
       return {...state, errorMsg}
     case RESET_USER:
       return {}
+     
+    default:
+      return state
+  }
+}
+
+function menuList(state = [], action) {
+  switch (action.type) {
+    case REQ_MENU_LIST:
+      return action.data;
     default:
       return state
   }
@@ -50,5 +64,6 @@ function user(state = initUser, action) {
  */
 export default combineReducers({
   headTitle,
-  user
+  user,
+  menuList
 })

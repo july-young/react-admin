@@ -8,10 +8,12 @@ import {
   RECEIVE_USER,
   SHOW_ERROR_MSG,
   RESET_USER,
-  GET_MENU_LIST
+  REQ_MENU_LIST
 } from './action-types'
 import storageUtils from "../utils/storageUtils";
 import Converter from "../utils/ModelConverter";
+import menuService from "../service/MenuService";
+
 
 const { reqLogin } = require('../api')
 
@@ -23,7 +25,15 @@ export const setHeadTitle = (headTitle) => ({ type: SET_HEAD_TITLE, data: headTi
 /**
  * 获取菜单列表
  */
-export const getMenuList = ()=>({type:GET_MENU_LIST,data:{}})
+export const reqMenuList = (data)=> {
+
+  return (dispatch,getState)=>{
+    dispatch({
+      type: REQ_MENU_LIST,
+      data: data
+  });
+  }
+}
 
 /*
 接收用户的同步action
@@ -65,6 +75,5 @@ export const login = (username, password) => {
       // message.error(msg)
       dispatch(showErrorMsg(msg))
     }
-
   }
 }

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Modal } from 'antd'
 
 import LinkButton from '../link-button'
 import { reqWeather } from '../../api'
 import { formateDate } from '../../utils/dateUtils'
 import './index.less'
-import { logout, setHeadTitle, getMenuList } from '../../redux/actions'
+import { logout, reqMenuList, setHeadTitle } from '../../redux/actions'
 import User from '../../models/user'
 import Menu from '../../models/menu'
 import Weather from '../../models/weather'
-
+import menuService  from "../../service/MenuService"
 
 const { connect } = require('react-redux')
 const { withRouter } = require('react-router-dom')
@@ -18,11 +18,13 @@ const { withRouter } = require('react-router-dom')
 interface HeaderReduxTypes {
   headTitle: any;
   user: User;
-  menuList: Array<Menu>
+  menuList: Menu[]
 }
 
 interface HeaderTypes extends HeaderReduxTypes {
+  setHeadTitle(title: string): Function
   logout(): any;
+  reqMenuList(x:any): Function
   location: any;
 }
 /*
@@ -50,32 +52,44 @@ const Header = (props: HeaderTypes) => {
 
   const getWeather = async () => {
     // 调用接口请求异步获取数据
-    const  weather:Weather  = await reqWeather('101010100')//杭州的城市编码
+    const weather: Weather = await reqWeather('101010100')//杭州的城市编码
     // 更新状态
-    setQuality(weather.quality);
-    setWeather(weather.wendu);
+    // setQuality(weather.quality);
+    // setWeather(weather.wendu);
   }
+
+  menuService.reqMenuTree().then((x:any)=>{
+    props.reqMenuList(x)
+  })
+
+  useEffect(() => {
+    
+    getWeather();
+    getTitle();
+  }, [props.location.pathname])
 
 
 
   const getTitle = () => {
+    const path =props.location.pathname
     // 得到当前请求路径
-    const path = props.location.pathname
-    let title
-    props.menuList.forEach((item: Menu) => {
+    let data =  props.menuList
+    if(!(data instanceof Array))return;
+    data.every((item: Menu) => {
       if (item.key === path) { // 如果当前item对象的key与path一样,item的title就是需要显示的title
-        title = item.title
+        props.setHeadTitle(item.title)
+        return false;
       } else if (item.children) {
         // 在所有子item中查找匹配的
         const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
         // 如果有值才说明有匹配的
         if (cItem) {
           // 取出它的title
-          title = cItem.title
+          props.setHeadTitle(item.title)
+          return false;
         }
       }
     })
-    return title
   }
 
   /*
@@ -128,6 +142,8 @@ const Header = (props: HeaderTypes) => {
 }
 
 export default connect(
-  (state: HeaderReduxTypes) => ({ ...state }),
-  { logout }
+  (state: HeaderReduxTypes) => ({   headTitle: state.headTitle,
+    user: state.user,
+    menuList: state.menuList }),
+  { logout, reqMenuList, setHeadTitle }
 )(withRouter(Header))

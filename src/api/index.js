@@ -11,11 +11,10 @@ import ajax from './ajax'
 // const BASE = 'http://localhost:5000'
 const BASE = ''
 // 登陆
-/*
-export function reqLogin(username, password) {
-  return ajax('/login', {username, password}, 'POST')
-}*/
 export const reqLogin = (username, password) => ajax(BASE + '/login', { username, password }, 'POST', true)
+
+// 获取菜单树
+export const reqMenuTree = () => ajax(BASE + '/menu', {}, 'GET')
 
 // 获取一级/二级分类的列表
 export const reqCategorys = (parentId) => ajax(BASE + '/manage/category/list', { parentId })
