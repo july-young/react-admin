@@ -7,7 +7,8 @@ import {
   SET_HEAD_TITLE,
   RECEIVE_USER,
   SHOW_ERROR_MSG,
-  RESET_USER
+  RESET_USER,
+  GET_MENU_LIST
 } from './action-types'
 import storageUtils from "../utils/storageUtils";
 import Converter from "../utils/ModelConverter";
@@ -18,6 +19,11 @@ const { reqLogin } = require('../api')
 设置头部标题的同步action
  */
 export const setHeadTitle = (headTitle) => ({ type: SET_HEAD_TITLE, data: headTitle })
+
+/**
+ * 获取菜单列表
+ */
+export const getMenuList = ()=>({type:GET_MENU_LIST,data:{}})
 
 /*
 接收用户的同步action
