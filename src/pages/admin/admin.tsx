@@ -5,8 +5,8 @@ import { Layout } from 'antd'
 import Home from '../home/home'
 import Header from '../../components/header'
 import Menu from '../../models/menu';
-
-
+import menuService from "../../service/MenuService"
+import { reqMenuList, setHeadTitle } from '../../redux/actions'
 const { Redirect, Route, Switch } = require('react-router-dom')
 
 const { connect } = require('react-redux')
@@ -21,9 +21,6 @@ function Admin(props: any) {
     // 自动跳转到登陆(在render()中)
     return <Redirect to='/login' />
   }
-
-
-
   return (
     <Layout style={{ minHeight: '100%' }}>
 
@@ -44,6 +41,6 @@ function Admin(props: any) {
 }
 
 export default connect(
-  (state: { user: User;menuList:Array<Menu>  }) => ({ user: state.user,menuList:state.menuList }),
-  {}
+  (state: { user: User; menuList: Array<Menu> }) => ({ user: state.user, menuList: state.menuList }),
+  { reqMenuList, setHeadTitle }
 )(Admin)

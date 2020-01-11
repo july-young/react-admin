@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo,useCallback } from 'react'
 import { Modal } from 'antd'
 
 import LinkButton from '../link-button'
@@ -9,7 +9,7 @@ import { logout, reqMenuList, setHeadTitle } from '../../redux/actions'
 import User from '../../models/user'
 import Menu from '../../models/menu'
 import Weather from '../../models/weather'
-import menuService  from "../../service/MenuService"
+import menuService from "../../service/MenuService"
 
 const { connect } = require('react-redux')
 const { withRouter } = require('react-router-dom')
@@ -24,7 +24,7 @@ interface HeaderReduxTypes {
 interface HeaderTypes extends HeaderReduxTypes {
   setHeadTitle(title: string): Function
   logout(): any;
-  reqMenuList(x:any): Function
+  reqMenuList(data:any): Function
   location: any;
 }
 /*
@@ -44,8 +44,8 @@ const Header = (props: HeaderTypes) => {
   const getTime = () => {
     // 每隔1s获取当前时间, 并更新状态数据currentTime
     const interId = setInterval(() => {
-      const currentTime = formateDate(Date.now())
-      setCurrentTime(currentTime);
+      const cur = formateDate(Date.now())
+      setCurrentTime(cur);
     }, 1000)
     setIntervalId(interId);
   }
@@ -58,19 +58,21 @@ const Header = (props: HeaderTypes) => {
     // setWeather(weather.wendu);
   }
 
-  menuService.reqMenuTree().then((x:any)=>{
-    props.reqMenuList(x)
-  })
 
   useEffect(() => {
-    
+
     getWeather();
     getTitle();
-  }, [props.location.pathname])
-
-
+  }, [props.location.pathname, props.menuList])
 
   const getTitle = () => {
+    console.log("aaaaa");
+    
+    if(props.menuList.length===0){
+      menuService.reqMenuTree().then((data: any) => {
+        props.reqMenuList(data)
+      })
+    }
     const path =props.location.pathname
     // 得到当前请求路径
     let data =  props.menuList
@@ -112,10 +114,9 @@ const Header = (props: HeaderTypes) => {
   useEffect(() => {
     console.log("getTime()");
     getTime();
-    getWeather();
     // 当前组件卸载之前调用
     return clearInterval(intervalId)
-  }, [])
+  }, [currentTime])
 
   const username = props.user.username
 
