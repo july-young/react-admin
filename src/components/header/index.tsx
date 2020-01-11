@@ -26,14 +26,14 @@ interface HeaderTypes extends HeaderReduxTypes {
   location: any;
 }
 /*
-左侧导航的组件
+ 头部的组件
  */
 const Header = (props: HeaderTypes) => {
 
 
   // 当前时间字符串
   const [currentTime, setCurrentTime] = useState(formateDate(Date.now()));
-  // 天气图片url
+  // 天气质量
   const [quality, setQuality] = useState('');
   // 天气的文本
   const [weather, setWeather] = useState('');
