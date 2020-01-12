@@ -25,9 +25,12 @@ export const setHeadTitle = (headTitle) => ({ type: SET_HEAD_TITLE, data: headTi
 /**
  * 获取菜单列表
  */
-export const reqMenuList = (data)=> {
+export const reqMenuList = ()=> {
 
-  return (dispatch,getState)=>{
+  return async dispatch => {
+  
+    const data =await menuService.reqMenuTree();
+  
     dispatch({
       type: REQ_MENU_LIST,
       data: data

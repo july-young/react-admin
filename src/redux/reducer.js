@@ -1,5 +1,5 @@
 
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
 import {
   SET_HEAD_TITLE,
@@ -8,9 +8,9 @@ import {
   RESET_USER,
   REQ_MENU_LIST
 } from './action-types'
-import {reqMenuTree} from '../api/index'
+import { reqMenuTree } from '../api/index'
 
-import storageUtils  from "../utils/storageUtils"
+import storageUtils from "../utils/storageUtils"
 
 import { resolve } from 'path'
 const initHeadTitle = ''
@@ -36,10 +36,10 @@ function user(state = initUser, action) {
     case SHOW_ERROR_MSG:
       const errorMsg = action.errorMsg
       // state.errorMsg = errorMsg  // 不要直接修改原本状态数据
-      return {...state, errorMsg}
+      return { ...state, errorMsg }
     case RESET_USER:
       return {}
-     
+
     default:
       return state
   }
@@ -48,6 +48,7 @@ function user(state = initUser, action) {
 function menuList(state = [], action) {
   switch (action.type) {
     case REQ_MENU_LIST:
+      if (!action.data) return state;
       return action.data;
     default:
       return state

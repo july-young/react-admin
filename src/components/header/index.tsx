@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo,useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { Modal } from 'antd'
 
 import LinkButton from '../link-button'
@@ -24,7 +24,7 @@ interface HeaderReduxTypes {
 interface HeaderTypes extends HeaderReduxTypes {
   setHeadTitle(title: string): Function
   logout(): any;
-  reqMenuList(data:any): Function
+  reqMenuList(): Function
   location: any;
 }
 /*
@@ -35,10 +35,9 @@ const Header = (props: HeaderTypes) => {
 
   // 当前时间字符串
   const [currentTime, setCurrentTime] = useState(formateDate(Date.now()));
-  // 天气质量
-  const [quality, setQuality] = useState('');
   // 天气的文本
-  const [weather, setWeather] = useState('');
+  const [weather, setWeather] = useState({ wendu: '', quality: '' });
+
   const [intervalId, setIntervalId] = useState();
 
   const getTime = () => {
@@ -54,29 +53,28 @@ const Header = (props: HeaderTypes) => {
     // 调用接口请求异步获取数据
     const weather: Weather = await reqWeather('101010100')//杭州的城市编码
     // 更新状态
-    // setQuality(weather.quality);
-    // setWeather(weather.wendu);
+    weather ? setWeather(weather) : setWeather({ wendu: "11", quality: '优' })
   }
 
+  useEffect(() => {
+    if (!weather.quality || !weather.wendu) {
+      getWeather();
+    }
+  }, [props.location.pathname])
 
   useEffect(() => {
-
-    getWeather();
     getTitle();
   }, [props.location.pathname, props.menuList])
 
   const getTitle = () => {
-    console.log("aaaaa");
-    
-    if(props.menuList.length===0){
-      menuService.reqMenuTree().then((data: any) => {
-        props.reqMenuList(data)
-      })
+
+    if (props.menuList.length === 0) {
+      props.reqMenuList()
     }
-    const path =props.location.pathname
+    const path = props.location.pathname
     // 得到当前请求路径
-    let data =  props.menuList
-    if(!(data instanceof Array))return;
+    let data = props.menuList
+    if (!(data instanceof Array)) return;
     data.every((item: Menu) => {
       if (item.key === path) { // 如果当前item对象的key与path一样,item的title就是需要显示的title
         props.setHeadTitle(item.title)
@@ -133,8 +131,8 @@ const Header = (props: HeaderTypes) => {
         <div className="header-bottom-left">{title}</div>
         <div className="header-bottom-right">
           <span>{currentTime}</span>
-          <span>空气质量：{quality}</span>
-          <span>温度：{weather} ℃</span>
+          <span>空气质量：{weather.quality}</span>
+          <span>温度：{weather.wendu} ℃</span>
         </div>
       </div>
     </div>
@@ -143,8 +141,10 @@ const Header = (props: HeaderTypes) => {
 }
 
 export default connect(
-  (state: HeaderReduxTypes) => ({   headTitle: state.headTitle,
+  (state: HeaderReduxTypes) => ({
+    headTitle: state.headTitle,
     user: state.user,
-    menuList: state.menuList }),
+    menuList: state.menuList
+  }),
   { logout, reqMenuList, setHeadTitle }
 )(withRouter(Header))

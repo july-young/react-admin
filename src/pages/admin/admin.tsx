@@ -21,6 +21,7 @@ function Admin(props: any) {
     // 自动跳转到登陆(在render()中)
     return <Redirect to='/login' />
   }
+
   return (
     <Layout style={{ minHeight: '100%' }}>
 
