@@ -7,6 +7,7 @@ import Header from '../../components/header'
 import Menu from '../../models/menu';
 import menuService from "../../service/MenuService"
 import { reqMenuList, setHeadTitle } from '../../redux/actions'
+import LeftNav from '../../components/left-nav';
 const { Redirect, Route, Switch } = require('react-router-dom')
 
 const { connect } = require('react-redux')
@@ -26,6 +27,7 @@ function Admin(props: any) {
     <Layout style={{ minHeight: '100%' }}>
 
       <Sider>
+      <LeftNav/>
       </Sider>
       <Layout>
         <Header>Header</Header>

@@ -38,6 +38,7 @@ function user(state = initUser, action) {
       // state.errorMsg = errorMsg  // 不要直接修改原本状态数据
       return { ...state, errorMsg }
     case RESET_USER:
+      window.location.reload();
       return {}
 
     default:

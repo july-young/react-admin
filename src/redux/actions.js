@@ -11,7 +11,7 @@ import {
   REQ_MENU_LIST
 } from './action-types'
 import storageUtils from "../utils/storageUtils";
-import Converter from "../utils/ModelConverter";
+import converter2User from "../converter/converter2User";
 import menuService from "../service/MenuService";
 
 
@@ -68,7 +68,7 @@ export const login = (username, password) => {
     const result = await reqLogin(username, password)  // {status: 0, data: user} {status: 1, msg: 'xxx'}
     // 2.1. 如果成功, 分发成功的同步action
     if (result.status === 0) {
-      const user = Converter.toUser( result.data)
+      const user = converter2User( result.data)
       // 保存local中
       storageUtils.saveUser(user)
       // 分发接收用户的同步action

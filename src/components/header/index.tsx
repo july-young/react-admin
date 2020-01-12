@@ -9,7 +9,6 @@ import { logout, reqMenuList, setHeadTitle } from '../../redux/actions'
 import User from '../../models/user'
 import Menu from '../../models/menu'
 import Weather from '../../models/weather'
-import menuService from "../../service/MenuService"
 
 const { connect } = require('react-redux')
 const { withRouter } = require('react-router-dom')
@@ -100,7 +99,7 @@ const Header = (props: HeaderTypes) => {
     Modal.confirm({
       content: '确定退出吗?',
       onOk: () => {
-        logout()
+        props.logout()
       }
     })
   }
@@ -110,7 +109,6 @@ const Header = (props: HeaderTypes) => {
   一般在此执行异步操作: 发ajax请求/启动定时器
    */
   useEffect(() => {
-    console.log("getTime()");
     getTime();
     // 当前组件卸载之前调用
     return clearInterval(intervalId)
@@ -119,7 +117,6 @@ const Header = (props: HeaderTypes) => {
   const username = props.user.username
 
   // 得到当前需要显示的title
-  // const title = this.getTitle()
   const title = props.headTitle
   return (
     <div className="header">
@@ -141,10 +138,6 @@ const Header = (props: HeaderTypes) => {
 }
 
 export default connect(
-  (state: HeaderReduxTypes) => ({
-    headTitle: state.headTitle,
-    user: state.user,
-    menuList: state.menuList
-  }),
+  (state: HeaderReduxTypes) => ({...state }),
   { logout, reqMenuList, setHeadTitle }
 )(withRouter(Header))

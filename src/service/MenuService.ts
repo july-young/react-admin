@@ -1,11 +1,11 @@
 import { reqMenuTree } from "../api/index";
-import Converter from "../utils/ModelConverter";
+import converter2Menu from "../converter/converter2Menu";
 const MenuService = {
 
   reqMenuTree: async () => {
     const result = await reqMenuTree();
     if (result.status === 0) {
-      return result.data.map((x: any) => Converter.toMenu(x));
+      return result.data.map((x: any) => converter2Menu(x));
     }
   }
 }
