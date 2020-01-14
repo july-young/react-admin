@@ -6,6 +6,7 @@ import Home from '../home/home'
 import Header from '../../components/header'
 import Menu from '../../models/menu';
 import menuService from "../../service/MenuService"
+import Category from '../category/category'
 import { reqMenuList, setHeadTitle } from '../../redux/actions'
 import LeftNav from '../../components/left-nav';
 const { Redirect, Route, Switch } = require('react-router-dom')
@@ -35,6 +36,7 @@ function Admin(props: any) {
           <Switch>
             <Redirect exact from='/' to='/home' />
             <Route path='/home' component={Home} />
+            <Route path='/category' component={Category}/>
           </Switch>
         </Content>
         <Footer style={{ textAlign: 'center', color: '#cccccc' }}>推荐使用谷歌浏览器，可以获得更佳页面操作体验</Footer>

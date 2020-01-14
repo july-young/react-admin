@@ -31,7 +31,10 @@ export default function ajax(url, data = {}, type = 'GET', form = false) {
         },
         params: data,
       });
-    } else { // 发POST请求
+    }else if(type === 'PUT'){
+      promise = axios.put(url, data)
+    }
+    else { // 发POST请求
       promise = axios.post(url, data)
     }
     // 2. 如果成功了, 调用resolve(value)
@@ -39,6 +42,7 @@ export default function ajax(url, data = {}, type = 'GET', form = false) {
       //如果身份认证信息失败
       if (response.data.status === 10000) {
         storageUtils.removeUser()
+        window.location.reload();
       }
       resolve(response.data)
       // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息

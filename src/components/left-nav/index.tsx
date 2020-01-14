@@ -110,7 +110,6 @@ const LeftNav = (props: LeftNavProps) => {
                     ))
                 }
             }
-
             return pre
         }, [])
     }
@@ -140,11 +139,9 @@ const LeftNav = (props: LeftNavProps) => {
                 selectedKeys={[path]}
                 defaultOpenKeys={openKey}
             >
-
                 {
                     menuNodes
                 }
-
             </Menu>
         </div>
     )

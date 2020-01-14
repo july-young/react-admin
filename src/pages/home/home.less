@@ -10,11 +10,19 @@
       top: 420px;
       width: 76%;
       border: 1px solid #e8e8e8;
+      .ant-card-body{
+        display: flex;
+        flex-wrap: wrap;
+        padding: 24px;
+        zoom: 1;
+        justify-content: space-around;
+      }
       .home-menu {
         font-size: 20px;
         span {
           cursor: pointer;
         }
+        
         .home-menu-active {
           border-bottom: 2px solid #1DA57A;
           color: #1DA57A;
@@ -25,11 +33,10 @@
         }
       }
       .home-table-left {
-        float: left;
-        width: 60%;
+        margin-bottom: 20PX;
+        width: 600px;
       }
       .home-table-right {
-        float: right;
         width: 330px;
       }
     }

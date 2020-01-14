@@ -17,13 +17,13 @@ export const reqLogin = (username, password) => ajax(BASE + '/login', { username
 export const reqMenuTree = () => ajax(BASE + '/menu', {}, 'GET')
 
 // 获取一级/二级分类的列表
-export const reqCategorys = (parentId) => ajax(BASE + '/manage/category/list', { parentId })
+export const reqCategorys = (parentId) => ajax(BASE + '/categories', { parentId })
 
 // 添加分类
-export const reqAddCategory = (categoryName, parentId) => ajax(BASE + '/manage/category/add', { categoryName, parentId }, 'POST')
+export const reqAddCategory = (name, parentId) => ajax(BASE + 'category', { name, parentId }, 'POST')
 
 // 更新分类
-export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + '/manage/category/update', { categoryId, categoryName }, 'POST')
+export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + 'category', { id:categoryId, name:categoryName }, 'PUT')
 
 // 获取一个分类
 export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', { categoryId })
