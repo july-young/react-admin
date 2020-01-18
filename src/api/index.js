@@ -7,11 +7,12 @@
  */
 import { message } from 'antd'
 import ajax from './ajax'
+import { MUTI_REQ, FORM_REQ } from '../utils/constants'
 
 // const BASE = 'http://localhost:5000'
 const BASE = ''
 // 登陆
-export const reqLogin = (username, password) => ajax(BASE + '/login', { username, password }, 'POST', true)
+export const reqLogin = (username, password) => ajax(BASE + '/login', { username, password }, 'POST', FORM_REQ)
 
 // 获取菜单树
 export const reqMenuTree = () => ajax(BASE + '/menu', {}, 'GET')
@@ -26,15 +27,16 @@ export const reqAddCategory = (name, parentId) => ajax(BASE + 'category', { name
 export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + 'category', { id:categoryId, name:categoryName }, 'PUT')
 
 // 获取一个分类
-export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', { categoryId })
+export const reqCategory = (categoryId) => ajax(BASE + '/category', { categoryId })
 
 // 获取商品分页列表
-export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', { pageNum, pageSize })
+export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/products', { pageNum, pageSize })
 
 // 更新商品的状态(上架/下架)
-export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', { productId, status }, 'POST')
+export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/updateStatus', { productId, status }, 'POST')
 
-
+//上传图片
+export const uploadImg=(data)=>ajax(BASE+'/img/upload',data,'POST',MUTI_REQ)
 
 /*
 搜索商品分页列表 (根据商品名称/商品描述)

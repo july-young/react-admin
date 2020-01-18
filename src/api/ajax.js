@@ -12,8 +12,9 @@
 import axios from 'axios'
 import { message } from 'antd'
 import storageUtils from "../utils/storageUtils";
+import { FORM_REQ, MUTI_REQ } from '../utils/constants';
 
-export default function ajax(url, data = {}, type = 'GET', form = false) {
+export default function ajax(url, data = {}, type = 'GET', form = 0) {
 
   return new Promise((resolve, reject) => {
     let promise
@@ -22,7 +23,7 @@ export default function ajax(url, data = {}, type = 'GET', form = false) {
       promise = axios.get(url, { // 配置对象
         params: data // 指定请求参数
       })
-    } else if (form) {
+    } else if (form === FORM_REQ) {
       promise = axios({
         method: 'post',
         url: url,
@@ -31,7 +32,10 @@ export default function ajax(url, data = {}, type = 'GET', form = false) {
         },
         params: data,
       });
-    }else if(type === 'PUT'){
+    } else if (form === MUTI_REQ) {
+      promise = axios.post(url, data, { headers: { 'Content-type': 'multipart/form-data' }});
+    }
+    else if (type === 'PUT') {
       promise = axios.put(url, data)
     }
     else { // 发POST请求
