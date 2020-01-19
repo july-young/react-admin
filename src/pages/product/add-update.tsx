@@ -12,11 +12,11 @@ import {
 import PicturesWall from './pictures-wall'
 import RichTextEditor from './rich-text-editor'
 import LinkButton from '../../components/link-button'
-import { reqCategorys, reqAddOrUpdateProduct } from '../../api'
+import { reqCategorys, reqAddProduct } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
 import CategoryModel from '../../models/category'
 import ProductModel from '../../models/product'
-import converter2Product from '../../converter/convertProduct'
+import productConverter from '../../converter/converter2Product'
 
 const { Item } = Form
 const { TextArea } = Input
@@ -104,7 +104,7 @@ const ProductAddUpdate = (props: ProductAddUpdateProps) => {
     const getCategorys = async (parentId: string) => {
         const result = await reqCategorys(parentId)   // {status: 0, data: categorys}
         if (result.status === 0) {
-            const categorys = result.data.map((x: any) => converter2Product(x))
+            const categorys = result.data.map((x: any) => productConverter.toProduct(x))
             // 如果是一级分类列表
             if (parentId === '0') {
 
@@ -184,7 +184,7 @@ const ProductAddUpdate = (props: ProductAddUpdateProps) => {
                 }
 
                 // 2. 调用接口请求函数去添加/更新
-                const result = await reqAddOrUpdateProduct(product)
+                const result = await reqAddProduct(productConverter.toProductAddForm( product))
 
                 // 3. 根据结果提示
                 if (result.status === 0) {

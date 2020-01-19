@@ -13,7 +13,9 @@ import LinkButton from '../../components/link-button'
 import { reqProducts, reqSearchProducts, reqUpdateStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
-import ProductModel from '../../models/product'
+import ProductModel from '../../models/product';
+import productConverter from '../../converter/converter2Product';
+import converter2Product from '../../converter/converter2Product'
 
 const Option = Select.Option
 
@@ -129,9 +131,9 @@ const ProductHome = (props: ProductHomeProps) => {
         setLoading(false) // 隐藏loading
         if (result.status === 0) {
             // 取出分页数据, 更新状态, 显示分页列表
-            const { total, list } = result.data
+            const { total, list } = result.data 
             setTotlal(total);
-            setProducts(list);
+            setProducts(list.map((x:any)=>converter2Product.toProduct(x)));
         }
     }
 

@@ -33,7 +33,7 @@ export const reqCategory = (categoryId) => ajax(BASE + '/category', { categoryId
 export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/products', { pageNum, pageSize })
 
 // 更新商品的状态(上架/下架)
-export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/updateStatus', { productId, status }, 'POST')
+export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/updateStatus', { id:productId, status }, 'PUT',FORM_REQ)
 
 //上传图片
 export const uploadImg=(data)=>ajax(BASE+'/img/upload',data,'POST',MUTI_REQ)
@@ -59,9 +59,12 @@ export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType })
 export const reqDeleteImg = (name) => ajax(BASE + '/manage/img/delete', { name }, 'POST')
 
 // 添加/修改商品
-export const reqAddOrUpdateProduct = (product) => ajax(BASE + '/manage/product/' + (product._id ? 'update' : 'add'), product, 'POST')
-// 修改商品
-// export const reqUpdateProduct = (product) => ajax(BASE + '/manage/product/update', product, 'POST')
+export const reqAddProduct = (product) => {
+ delete product._id;
+ return ajax(BASE + '/product', {...product}, 'POST')
+}
+  // 修改商品
+export const reqUpdateProduct = (product) => ajax(BASE + '/product', product, 'PUT')
 
 
 // 获取所有角色的列表
