@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import {
     Card,
     Icon,
@@ -18,12 +18,12 @@ import CategoryModel from '../../models/category'
 import ProductModel from '../../models/product'
 import productConverter from '../../converter/converter2Product'
 
-const { Item } = Form
-const { TextArea } = Input
+import { ProductContext } from './product'
+
+const { Item } = Form;
+const { TextArea } = Input;
 
 interface ProductAddUpdateProps {
-    isUpdate: any;
-    product: ProductModel;
     form: any;
     history: any;
     imgs: any;
@@ -46,20 +46,26 @@ const ProductAddUpdate = (props: ProductAddUpdateProps) => {
     const [detail, setDetail] = useState();
     const [isUpdate, setIsUpdate] = useState(false);
 
-    if (props.product) {
-        setProduct(product);
-        setDetail(props.editor);
-        // 保存是否是更新的标识
-        setIsUpdate(true);
-    }
+    const productContext= useContext(ProductContext);
+    const { productChosen } =productContext;
 
     useEffect(() => {
+        if (productChosen && productChosen._id) {
+            setProduct(productChosen);
+            setDetail(props.editor);
+            // 保存是否是更新的标识
+            setIsUpdate(true);
+        }
         getCategorys('0')
         /*
         在卸载之前清除保存的数据
         */
         return () => {
-            memoryUtils.product = new ProductModel();
+            
+            productContext.dispatch({
+                type: "clear",
+            });
+            setIsUpdate(false);
         }
     }, []);
 
@@ -179,19 +185,19 @@ const ProductAddUpdate = (props: ProductAddUpdateProps) => {
                 const product = { _id: '', name, desc, price, imgs: props.imgs, detail: props.editor, pCategoryId, categoryId }
 
                 // 如果是更新, 需要添加_id
-                if (props.isUpdate) {
-                    product._id = props.product._id || ''
+                if (isUpdate) {
+                    product._id = product._id || ''
                 }
 
                 // 2. 调用接口请求函数去添加/更新
-                const result = await reqAddProduct(productConverter.toProductAddForm( product))
+                const result = await reqAddProduct(productConverter.toProductAddForm(product))
 
                 // 3. 根据结果提示
                 if (result.status === 0) {
-                    message.success(`${props.isUpdate ? '更新' : '添加'}商品成功!`)
+                    message.success(`${isUpdate ? '更新' : '添加'}商品成功!`)
                     props.history.goBack()
                 } else {
-                    message.error(`${props.isUpdate ? '更新' : '添加'}商品失败!`)
+                    message.error(`${isUpdate ? '更新' : '添加'}商品失败!`)
                 }
             }
         })
@@ -209,81 +215,86 @@ const ProductAddUpdate = (props: ProductAddUpdateProps) => {
             <LinkButton onClick={() => props.history.goBack()}>
                 <Icon type='arrow-left' style={{ fontSize: 20 }} />
             </LinkButton>
-            <span>{props.isUpdate ? '修改商品' : '添加商品'}</span>
+            <span>{isUpdate ? '修改商品' : '添加商品'}</span>
         </span>
     )
 
     const { getFieldDecorator } = props.form
 
     return (
-        <Card title={title}>
-            <Form {...formItemLayout}>
-                <Item label="商品名称">
-                    {
-                        getFieldDecorator('name', {
-                            initialValue: product.name,
-                            rules: [
-                                { required: true, message: '必须输入商品名称' }
-                            ]
-                        })(<Input placeholder='请输入商品名称' />)
-                    }
-                </Item>
-                <Item label="商品描述">
-                    {
-                        getFieldDecorator('desc', {
-                            initialValue: product.desc,
-                            rules: [
-                                { required: true, message: '必须输入商品描述' }
-                            ]
-                        })(<TextArea placeholder="请输入商品描述" autosize={{ minRows: 2, maxRows: 6 }} />)
-                    }
+        <ProductContext.Consumer>
+            {productChosen =>
+                <Card title={title}>
+                    <Form {...formItemLayout}>
+                        <Item label="商品名称">
+                            {
+                                getFieldDecorator('name', {
+                                    initialValue: product.name,
+                                    rules: [
+                                        { required: true, message: '必须输入商品名称' }
+                                    ]
+                                })(<Input placeholder='请输入商品名称' />)
+                            }
+                        </Item>
+                        <Item label="商品描述">
+                            {
+                                getFieldDecorator('desc', {
+                                    initialValue: product.desc,
+                                    rules: [
+                                        { required: true, message: '必须输入商品描述' }
+                                    ]
+                                })(<TextArea placeholder="请输入商品描述" autosize={{ minRows: 2, maxRows: 6 }} />)
+                            }
 
-                </Item>
-                <Item label="商品价格">
+                        </Item>
+                        <Item label="商品价格">
 
-                    {
-                        getFieldDecorator('price', {
-                            initialValue: product.price,
-                            rules: [
-                                { required: true, message: '必须输入商品价格' },
-                                { validator: validatePrice }
-                            ]
-                        })(<Input type='number' placeholder='请输入商品价格' addonAfter='元' />)
-                    }
-                </Item>
-                <Item label="商品分类">
-                    {
-                        getFieldDecorator('categoryIds', {
-                            initialValue: categoryIds,
-                            rules: [
-                                { required: true, message: '必须指定商品分类' },
-                            ]
-                        })(
-                            <Cascader
-                                placeholder='请指定商品分类'
-                                options={options}  /*需要显示的列表数据数组*/
-                                loadData={loadData} /*当选择某个列表项, 加载下一级列表的监听回调*/
-                            />
-                        )
-                    }
+                            {
+                                getFieldDecorator('price', {
+                                    initialValue: product.price,
+                                    rules: [
+                                        { required: true, message: '必须输入商品价格' },
+                                        { validator: validatePrice }
+                                    ]
+                                })(<Input type='number' placeholder='请输入商品价格' addonAfter='元' />)
+                            }
+                        </Item>
+                        <Item label="商品分类">
+                            {
+                                getFieldDecorator('categoryIds', {
+                                    initialValue: categoryIds,
+                                    rules: [
+                                        { required: true, message: '必须指定商品分类' },
+                                    ]
+                                })(
+                                    <Cascader
+                                        placeholder='请指定商品分类'
+                                        options={options}  /*需要显示的列表数据数组*/
+                                        loadData={loadData} /*当选择某个列表项, 加载下一级列表的监听回调*/
+                                    />
+                                )
+                            }
 
-                </Item>
+                        </Item>
 
-                <Item label="商品图片">
-                    <PicturesWall setImgs={setImgs} imgs={imgs} />
-                </Item>
+                        <Item label="商品图片">
+                            <PicturesWall setImgs={setImgs} imgs={imgs} />
+                        </Item>
 
-                <Item label="商品详情" labelCol={{ span: 2 }} wrapperCol={{ span: 20 }}>
-                    <RichTextEditor setEditor={setEditor} detail={detail} />
-                </Item>
-                <Item>
-                    <Button type='primary' onClick={submit}>提交</Button>
-                </Item>
-            </Form>
-        </Card>
+                        <Item label="商品详情" labelCol={{ span: 2 }} wrapperCol={{ span: 20 }}>
+                            <RichTextEditor setEditor={setEditor} detail={detail} />
+                        </Item>
+                        <Item>
+                            <Button type='primary' onClick={submit}>提交</Button>
+                        </Item>
+                    </Form>
+                </Card>
+            }
+        </ProductContext.Consumer>
     )
 
 }
 
-export default Form.create()(ProductAddUpdate)
 
+
+export default Form.create()(ProductAddUpdate);

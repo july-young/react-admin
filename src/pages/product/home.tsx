@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import {
     Card,
     Select,
@@ -14,8 +14,9 @@ import { reqProducts, reqSearchProducts, reqUpdateStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
 import ProductModel from '../../models/product';
-import productConverter from '../../converter/converter2Product';
 import converter2Product from '../../converter/converter2Product'
+import { ProductContext } from './product'
+
 
 const Option = Select.Option
 
@@ -31,7 +32,7 @@ const ProductHome = (props: ProductHomeProps) => {
     const [columns, setColumns] = useState(new Array<any>())
 
     // 商品的总数量
-    const [total, setTotlal] = useState(0)
+    const [total, setTotal] = useState(0)
     // 商品的数组
     const [products, setProducts] = useState([]);
     // 是否正在加载中
@@ -40,6 +41,8 @@ const ProductHome = (props: ProductHomeProps) => {
     const [searchName, setSearchName] = useState('');
     // 根据哪个字段搜索
     const [searchType, setSearchType] = useState('productName');
+
+    const productContext = useContext(ProductContext)
 
     /*
     初始化table的列的数组
@@ -107,9 +110,13 @@ const ProductHome = (props: ProductHomeProps) => {
     /*
     显示修改商品界面
      */
-    const showUpdate = (prodcut: ProductModel) => {
+    const showUpdate = (product: ProductModel) => {
         // 缓存product对象 ==> 给detail组件使用
-        memoryUtils.product = prodcut
+        productContext.dispatch({
+            type: "add",
+            payload: product
+          })
+        //setProductChosen(product);
         props.history.push('/product/addupdate')
     }
 
@@ -131,9 +138,9 @@ const ProductHome = (props: ProductHomeProps) => {
         setLoading(false) // 隐藏loading
         if (result.status === 0) {
             // 取出分页数据, 更新状态, 显示分页列表
-            const { total, list } = result.data 
-            setTotlal(total);
-            setProducts(list.map((x:any)=>converter2Product.toProduct(x)));
+            const { total, list } = result.data
+            setTotal(total);
+            setProducts(list.map((x: any) => converter2Product.toProduct(x)));
         }
     }
 
@@ -181,22 +188,22 @@ const ProductHome = (props: ProductHomeProps) => {
     )
 
     return (
-        <Card title={title} extra={extra}>
-            <Table
-                bordered
-                rowKey='_id'
-                loading={loading}
-                dataSource={products}
-                columns={columns}
-                pagination={{
-                    current: pageNum,
-                    total,
-                    defaultPageSize: PAGE_SIZE,
-                    showQuickJumper: true,
-                    onChange: getProducts
-                }}
-            />
-        </Card>
+            <Card title={title} extra={extra}>
+                <Table
+                    bordered
+                    rowKey='_id'
+                    loading={loading}
+                    dataSource={products}
+                    columns={columns}
+                    pagination={{
+                        current: pageNum,
+                        total,
+                        defaultPageSize: PAGE_SIZE,
+                        showQuickJumper: true,
+                        onChange: getProducts
+                    }}
+                />
+            </Card>
     )
 }
 
