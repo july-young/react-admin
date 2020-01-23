@@ -9,7 +9,7 @@ const toProduct = (productVo) => {
     product.desc = productVo.description;
     product.price = productVo.price;
     product.detail = productVo.detail;
-    product.imgs = productVo.imgs;
+    product.imgs =  productVo.imgs?  productVo.imgs:[];
     product.status = productVo.status;
     product.categoryId = productVo.categoryId;
     product.pCategoryId = productVo.pCategoryId;
@@ -23,4 +23,13 @@ const toProductAddForm = (product) => {
     return product;
 }
 
-export default { toProduct , toProductAddForm };
+
+const toProductUpdateForm = (product) => {
+    product.id=product._id
+    product.description = product.desc;
+    delete product.desc;
+    delete product._id;
+    return product;
+}
+
+export default { toProduct , toProductAddForm ,toProductUpdateForm};

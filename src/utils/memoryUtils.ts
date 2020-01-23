@@ -6,7 +6,7 @@ import User from "../models/user";
  */
 class MemoryUtils{
   user?: User; // 保存当前登陆的user
-  product: ProductModel=new ProductModel(); // 指定的商品对象
+  product: ProductModel|null=new ProductModel(); // 指定的商品对象
   
 }
 

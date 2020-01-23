@@ -24,29 +24,23 @@ export const reqCategorys = (parentId) => ajax(BASE + '/categories', { parentId 
 export const reqAddCategory = (name, parentId) => ajax(BASE + 'category', { name, parentId }, 'POST')
 
 // 更新分类
-export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + 'category', { id:categoryId, name:categoryName }, 'PUT')
+export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + 'category', { id: categoryId, name: categoryName }, 'PUT')
 
 // 获取一个分类
 export const reqCategory = (categoryId) => ajax(BASE + '/category', { categoryId })
 
-// 获取商品分页列表
-export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/products', { pageNum, pageSize })
+// 获取一个分类的所有父类
+export const reqCategoryParents = (categoryId) => ajax(BASE + '/category/parents', { id:categoryId })
+// 获取所有类
+export const reqCategoryTree = () => ajax(BASE + '/category/tree',{})
 
 // 更新商品的状态(上架/下架)
-export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/updateStatus', { id:productId, status }, 'PUT',FORM_REQ)
+export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/updateStatus', { id: productId, status }, 'PUT', FORM_REQ)
 
 //上传图片
-export const uploadImg=(data)=>ajax(BASE+'/img/upload',data,'POST',MUTI_REQ)
+export const uploadImg = (data) => ajax(BASE + '/img/upload', data, 'POST', MUTI_REQ)
 
-/*
-搜索商品分页列表 (根据商品名称/商品描述)
-searchType: 搜索的类型, productName/productDesc
- */
-export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType }) => ajax(BASE + '/manage/product/search', {
-  pageNum,
-  pageSize,
-  [searchType]: searchName,
-})
+
 
 // 搜索商品分页列表 (根据商品描述)
 /*export const reqSearchProducts2 = ({pageNum, pageSize, searchName}) => ajax(BASE + '/manage/product/search', {
@@ -57,16 +51,26 @@ export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType })
 
 // 删除指定名称的图片
 export const reqDeleteImg = (name) => ajax(BASE + '/img/delete', { name }, 'POST')
-
-// 添加/修改商品
-export const reqAddProduct = (product) => {
- delete product._id;
- return ajax(BASE + '/product', {...product}, 'POST')
-}
-  // 修改商品
+// 商品API==================================================================================================================
+// 根据Id获取商品
+export const reqProduct = (productId) => ajax(BASE + '/product', { productId })
+// 获取商品分页列表
+export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/products', { pageNum, pageSize })
+// 添加商品
+export const reqAddProduct = (product) => { delete product._id; return ajax(BASE + '/product', { ...product }, 'POST')}
+// 修改商品
 export const reqUpdateProduct = (product) => ajax(BASE + '/product', product, 'PUT')
+/*
+搜索商品分页列表 (根据商品名称/商品描述)
+searchType: 搜索的类型, productName/productDesc
+ */
+export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType }) => ajax(BASE + '/manage/product/search', {
+  pageNum,
+  pageSize,
+  [searchType]: searchName,
+})
 
-
+// 角色API===================================================================================================================
 // 获取所有角色的列表
 export const reqRoles = () => ajax(BASE + '/manage/role/list')
 // 添加角色

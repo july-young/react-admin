@@ -15,8 +15,6 @@ import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
 import ProductModel from '../../models/product';
 import converter2Product from '../../converter/converter2Product'
-import { ProductContext } from './product'
-
 
 const Option = Select.Option
 
@@ -41,8 +39,6 @@ const ProductHome = (props: ProductHomeProps) => {
     const [searchName, setSearchName] = useState('');
     // 根据哪个字段搜索
     const [searchType, setSearchType] = useState('productName');
-
-    const productContext = useContext(ProductContext)
 
     /*
     初始化table的列的数组
@@ -112,12 +108,8 @@ const ProductHome = (props: ProductHomeProps) => {
      */
     const showUpdate = (product: ProductModel) => {
         // 缓存product对象 ==> 给detail组件使用
-        productContext.dispatch({
-            type: "add",
-            payload: product
-          })
-        //setProductChosen(product);
-        props.history.push('/product/addupdate')
+        memoryUtils.product=product;
+        props.history.push('/product/update'+'/'+product._id)
     }
 
     /*
@@ -139,7 +131,7 @@ const ProductHome = (props: ProductHomeProps) => {
         if (result.status === 0) {
             // 取出分页数据, 更新状态, 显示分页列表
             const { total, list } = result.data
-            setTotal(total);
+            setTotal( parseInt(total));
             setProducts(list.map((x: any) => converter2Product.toProduct(x)));
         }
     }

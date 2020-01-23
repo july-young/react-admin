@@ -1,9 +1,10 @@
 /*
 用来指定商品详情的富文本编辑器组件
  */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext, memo, useCallback, useMemo } from 'react'
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import {ProductContext} from './product';
 
 const { EditorState, convertToRaw, ContentState } = require('draft-js')
 const { Editor } = require('react-draft-wysiwyg')
@@ -11,27 +12,28 @@ const draftToHtml = require('draftjs-to-html')
 const htmlToDraft = require('html-to-draftjs')
 
 interface RichTextEditorProps {
-    detail: string;
-    setEditor:Function;
 }
 
-const RichTextEditor = (props: RichTextEditorProps) => {
+const RichTextEditor = memo((props: RichTextEditorProps) => {
+
+    const { detail, dispatch, detailRec } = useContext(ProductContext);
     // 创建一个没有内容的编辑对象
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     useEffect(() => {
 
-        const html = props.detail
-        if (html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
-            const contentBlock = htmlToDraft(html)
-            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
-            const editorState = EditorState.createWithContent(contentState)
-            setEditorState(editorState);
-        } else {
-            // 创建一个没有内容的编辑对象
-            setEditorState(EditorState.createEmpty());
+        if (detailRec) {
+            const html = detail
+            if (html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
+                const contentBlock = htmlToDraft.default(html)
+                const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
+                const editorState = EditorState.createWithContent(contentState)
+                setEditorState(editorState);
+            } else {
+                // 创建一个没有内容的编辑对象
+                setEditorState(EditorState.createEmpty());
+            }
         }
-       props.setEditor(getDetail())
-    }, [])
+    }, [detailRec])
 
 
     /*
@@ -39,13 +41,14 @@ const RichTextEditor = (props: RichTextEditorProps) => {
      */
     const onEditorStateChange = (editorState: any) => {
         console.log('onEditorStateChange()')
+        dispatch({ type: 'setDetail', payload: { detail: getDetail(), productReceived: false } })
         setEditorState(editorState)
     }
 
-    const getDetail = () => {
+    const getDetail = useCallback(() => {
         // 返回输入数据对应的html格式的文本
         return draftToHtml(convertToRaw(editorState.getCurrentContent()))
-    }
+    }, [editorState])
 
     const uploadImageCallBack = (file: any) => {
         return new Promise(
@@ -78,6 +81,6 @@ const RichTextEditor = (props: RichTextEditorProps) => {
             }}
         />
     )
-}
+});
 
 export default RichTextEditor;

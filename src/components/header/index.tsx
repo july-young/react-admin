@@ -50,7 +50,7 @@ const Header = (props: HeaderTypes) => {
 
   const getWeather = async () => {
     // 调用接口请求异步获取数据
-    const weather: Weather = await reqWeather('101010100')//杭州的城市编码
+    const weather: Weather = await reqWeather('101210101')//杭州的城市编码
     // 更新状态
     weather ? setWeather(weather) : setWeather({ wendu: "", quality: '' })
   }
