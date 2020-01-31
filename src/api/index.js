@@ -18,7 +18,7 @@ export const reqLogin = (username, password) => ajax(BASE + '/login', { username
 export const reqMenuTree = () => ajax(BASE + '/menu', {}, 'GET')
 
 // 获取菜单
-export const reqMenus = (roleId) => ajax(BASE + '/menus', {roleId}, 'GET')
+export const reqMenus = (roleId) => ajax(BASE + '/menus', { roleId }, 'GET')
 
 // 获取一级/二级分类的列表
 export const reqCategorys = (parentId) => ajax(BASE + '/categories', { parentId })
@@ -33,9 +33,9 @@ export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + '
 export const reqCategory = (categoryId) => ajax(BASE + '/category', { categoryId })
 
 // 获取一个分类的所有父类
-export const reqCategoryParents = (categoryId) => ajax(BASE + '/category/parents', { id:categoryId })
+export const reqCategoryParents = (categoryId) => ajax(BASE + '/category/parents', { id: categoryId })
 // 获取所有类
-export const reqCategoryTree = () => ajax(BASE + '/category/tree',{})
+export const reqCategoryTree = () => ajax(BASE + '/category/tree', {})
 
 // 更新商品的状态(上架/下架)
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/updateStatus', { id: productId, status }, 'PUT', FORM_REQ)
@@ -60,7 +60,7 @@ export const reqProduct = (productId) => ajax(BASE + '/product', { productId })
 // 获取商品分页列表
 export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/products', { pageNum, pageSize })
 // 添加商品
-export const reqAddProduct = (product) => { delete product._id; return ajax(BASE + '/product', { ...product }, 'POST')}
+export const reqAddProduct = (product) => { delete product._id; return ajax(BASE + '/product', { ...product }, 'POST') }
 // 修改商品
 export const reqUpdateProduct = (product) => ajax(BASE + '/product', product, 'PUT')
 /*
@@ -77,17 +77,19 @@ export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType })
 // 获取所有角色的列表
 export const reqRoles = () => ajax(BASE + '/roles')
 // 添加角色
-export const reqAddRole = (roleName) => ajax(BASE + '/role', { name:roleName }, 'POST')
+export const reqAddRole = (roleName) => ajax(BASE + '/role', { name: roleName }, 'POST')
 // 添加角色
-export const reqUpdateRole = (roleId,menuKeys) => ajax(BASE + '/role', { id:roleId,permissionKeys: menuKeys }, 'PUT')
+export const reqUpdateRole = (roleId, menuKeys) => ajax(BASE + '/role', { id: roleId, permissionKeys: menuKeys }, 'PUT')
 
-
+// 用户API===================================================================================================================
 // 获取所有用户的列表
-export const reqUsers = () => ajax(BASE + '/manage/user/list')
+export const reqUsers = (pagination) => ajax(BASE + '/users', { page: pagination.current, size: pagination.pageSize })
 // 删除指定用户
-export const reqDeleteUser = (userId) => ajax(BASE + '/manage/user/delete', { userId }, 'POST')
-// 添加/更新用户
-export const reqAddOrUpdateUser = (user) => ajax(BASE + '/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST')
+export const reqDeleteUser = (userId) => ajax(BASE + '/user', { id:userId }, 'DELETE')
+// 添加用户
+export const reqAddUser = (user) => ajax(BASE + '/user', user, 'POST')
+// 更新用户
+export const reqUpdateUser = (user) => ajax(BASE + '/user', user, 'PUT')
 
 /*
 json请求的接口请求函数

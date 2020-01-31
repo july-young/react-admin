@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import User from '../../models/user';
+import UserModel from '../../models/user';
 import { Layout } from 'antd'
 
 import Home from '../home/home'
 import Role from '../role/role'
+import User from '../user/user'
 import Header from '../../components/header'
 import Menu from '../../models/menu';
 import Category from '../category/category'
@@ -40,6 +41,7 @@ function Admin(props: any) {
             <Route path='/category' component={Category}/>
             <Route path='/product' component={Product}/>
             <Route path='/role' component={Role}/>
+            <Route path='/user' component={User}/>
             
           </Switch>
         </Content>
@@ -50,6 +52,6 @@ function Admin(props: any) {
 }
 
 export default connect(
-  (state: { user: User; menuList: Array<Menu> }) => ({ user: state.user, menuList: state.menuList }),
+  (state: { user: UserModel; menuList: Array<Menu> }) => ({ user: state.user, menuList: state.menuList }),
   { reqMenuList, setHeadTitle }
 )(Admin)

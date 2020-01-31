@@ -38,7 +38,16 @@ export default function ajax(url, data = {}, type = 'GET', form = 0) {
     else if (type === 'PUT') {
       promise = axios.put(url, data)
     }
-    else { // 发POST请求
+    else if(type === 'DELETE'){
+      promise =  axios({
+        method: 'delete',
+        url: url,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded',
+        },
+        params: data,
+      });
+    }else { // 发POST请求
       promise = axios.post(url, data)
     }
     // 2. 如果成功了, 调用resolve(value)
