@@ -3,6 +3,7 @@ import User from '../../models/user';
 import { Layout } from 'antd'
 
 import Home from '../home/home'
+import Role from '../role/role'
 import Header from '../../components/header'
 import Menu from '../../models/menu';
 import Category from '../category/category'
@@ -38,6 +39,8 @@ function Admin(props: any) {
             <Route path='/home' component={Home} />
             <Route path='/category' component={Category}/>
             <Route path='/product' component={Product}/>
+            <Route path='/role' component={Role}/>
+            
           </Switch>
         </Content>
         <Footer style={{ textAlign: 'center', color: '#cccccc' }}>推荐使用谷歌浏览器，可以获得更佳页面操作体验</Footer>

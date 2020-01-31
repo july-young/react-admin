@@ -4,8 +4,12 @@
 
 const converter2Role= (roleVo) => {
     let role = {};
-    role.name = roleVo.name
-    role.menus = roleVo.permissions
+    role.name = roleVo.name;
+    role.menus = roleVo.permissions;
+    role._id=roleVo.id;
+    role.gmtCreate=roleVo.gmtCreate;
+    role.gmtAuth=roleVo.gmtAuth;
+    role.authUser=roleVo.authUserName;
     return role
 }
 

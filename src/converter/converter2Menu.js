@@ -4,6 +4,7 @@
 
 const converter2Menu = (menuVo) => {
     let menu = {}
+    menu._id = menuVo.id
     menu.title = menuVo.name
     menu.key = menuVo.url
     menu.icon = menuVo.icon
