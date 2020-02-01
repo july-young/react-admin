@@ -58,7 +58,7 @@ export const reqUpdateProduct = (product) => ajax(BASE + '/product', product, 'P
 搜索商品分页列表 (根据商品名称/商品描述)
 searchType: 搜索的类型, productName/productDesc
  */
-export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType }) => ajax(BASE + '/manage/product/search', {
+export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType }) => ajax(BASE + '/products', {
   pageNum,
   pageSize,
   [searchType]: searchName,

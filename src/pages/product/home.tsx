@@ -38,7 +38,7 @@ const ProductHome = (props: ProductHomeProps) => {
     // 搜索的关键字
     const [searchName, setSearchName] = useState('');
     // 根据哪个字段搜索
-    const [searchType, setSearchType] = useState('productName');
+    const [searchType, setSearchType] = useState('name');
 
     /*
     初始化table的列的数组
@@ -159,8 +159,8 @@ const ProductHome = (props: ProductHomeProps) => {
                 style={{ width: 150 }}
                 onChange={(value: any) => { setSearchType(value) }}
             >
-                <Option value='productName'>按名称搜索</Option>
-                <Option value='productDesc'>按描述搜索</Option>
+                <Option value='name'>按名称搜索</Option>
+                <Option value='desc'>按描述搜索</Option>
             </Select>
             <Input
                 placeholder='关键字'
