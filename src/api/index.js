@@ -43,17 +43,8 @@ export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/upda
 //上传图片
 export const uploadImg = (data) => ajax(BASE + '/img/upload', data, 'POST', MUTI_REQ)
 
-
-
-// 搜索商品分页列表 (根据商品描述)
-/*export const reqSearchProducts2 = ({pageNum, pageSize, searchName}) => ajax(BASE + '/manage/product/search', {
-  pageNum,
-  pageSize,
-  productDesc: searchName,
-})*/
-
 // 删除指定名称的图片
-export const reqDeleteImg = (name) => ajax(BASE + '/img/delete', { name }, 'POST')
+export const reqDeleteImg = (name) => ajax(BASE + '/img/delete', { name }, 'POST',FORM_REQ)
 // 商品API==================================================================================================================
 // 根据Id获取商品
 export const reqProduct = (productId) => ajax(BASE + '/product', { productId })

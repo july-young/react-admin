@@ -67,7 +67,8 @@ const PicturesWall = (props: PicturesWallProps) => {
         console.log('handleChange()', file.status, fileList.length, file === fileList[fileList.length - 1])
 
         if (file.status === 'removed') { // 删除图片
-            const result = await reqDeleteImg(file.name)
+            const fileName= file.name.replace(BASE_IMG_URL,'');
+            const result = await reqDeleteImg(fileName)
             if (result.status === 0) {
                 message.success('删除图片成功!')
             } else {
@@ -100,11 +101,11 @@ const PicturesWall = (props: PicturesWallProps) => {
             setFileList((fl: Array<any>) => {
                 const file = fl[fl.length - 1];
                 if (file) {
-                    file.name=url;
+                    file.name=result.msg;
                     file.url = url;
                     file.status = 'done';
                 }
-
+                dispatch({type:"setImgs",payload:{imgsRec:true,imgs:fl.map((x:any)=>x.name) }})
                 return [...fl]
             });
 
