@@ -7,10 +7,9 @@
  */
 import { message } from 'antd'
 import ajax from './ajax'
-import { MUTI_REQ, FORM_REQ } from '../utils/constants'
+import { MUTI_REQ, FORM_REQ,BASE } from '../utils/constants'
 
 // const BASE = 'http://localhost:5000'
-const BASE = ''
 // 登陆
 export const reqLogin = (username, password) => ajax(BASE + '/login', { username, password }, 'POST', FORM_REQ)
 

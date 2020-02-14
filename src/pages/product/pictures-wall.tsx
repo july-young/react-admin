@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Upload, Icon, Modal, message } from 'antd'
 import { reqDeleteImg, uploadImg } from '../../api'
-import { BASE_IMG_URL, UPLOAD_IMG_URL } from "../../utils/constants";
+import { BASE_IMG_URL } from "../../utils/constants";
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
 import {ProductContext} from './product';

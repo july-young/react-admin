@@ -56,8 +56,9 @@ export default function ajax(url, data = {}, type = 'GET', form = 0) {
       if (response.data.status === 10000) {
         storageUtils.removeUser()
         window.location.reload();
+      }else{
+        resolve(response.data)
       }
-      resolve(response.data)
       // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
     }).catch(error => {
       // reject(error)
