@@ -172,7 +172,6 @@
       ]
     ]
   },
-  ,
   "proxy": "http://localhost:5001",
   "devDependencies": {
     "babel-plugin-import": "^1.13.0"
