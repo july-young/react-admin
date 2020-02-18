@@ -1,10 +1,15 @@
 import React from 'react'
-import Login from './pages/login/login'
-import Admin from './pages/admin/admin'
+
+
+import AsyncComponent from './pages/admin/AsyncComponent.jsx';
+
 
 import {
   login
 } from './redux/actions'
+
+const Login =AsyncComponent(() => import('./pages/login/login'));
+const Admin =AsyncComponent(() => import('./pages/admin/admin'));
 
 const {connect} = require( 'react-redux')
 

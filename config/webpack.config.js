@@ -28,6 +28,8 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -159,11 +161,12 @@ module.exports = function(webpackEnv) {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap
-        ? 'source-map'
-        : false
-      : isEnvDevelopment && 'cheap-module-source-map',
+    devtool: false,
+    // devtool: isEnvProduction
+    //   ? shouldUseSourceMap
+    //     ? 'source-map'
+    //     : false
+    //   : isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: [
@@ -223,6 +226,7 @@ module.exports = function(webpackEnv) {
     optimization: {
       minimize: isEnvProduction,
       minimizer: [
+        new UglifyJsPlugin(),
         // This is only used in production mode
         new TerserPlugin({
           terserOptions: {
@@ -288,8 +292,11 @@ module.exports = function(webpackEnv) {
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
-        chunks: 'all',
-        name: false,
+        // chunks: 'all',
+        // name: false,
+        chunks: 'async',
+        minSize:50000,
+        maxSize:100000
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
@@ -569,6 +576,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new BundleAnalyzerPlugin({openAnalyzer:false,analyzerMode:'static'}),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(

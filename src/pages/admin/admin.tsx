@@ -2,20 +2,21 @@ import React, { useEffect } from 'react'
 import UserModel from '../../models/user';
 import { Layout } from 'antd'
 
-import Home from '../home/home'
-import Role from '../role/role'
-import User from '../user/user'
-import Header from '../../components/header'
-import Menu from '../../models/menu';
-import Category from '../category/category'
-import Product from '../product/product'
 import { reqMenuList, setHeadTitle } from '../../redux/actions'
-import LeftNav from '../../components/left-nav';
+import AsyncComponent from './AsyncComponent.jsx';
+import Menu from '../../models/menu';
 
-import Bar from '../charts/bar'
-import Line from '../charts/line'
-import Pie from '../charts/pie'
-import NotFound from '../not-found/not-found'
+const Home =AsyncComponent(() => import('../home/home'));
+const Role =AsyncComponent(() => import('../role/role'));
+const User =AsyncComponent(() => import('../user/user'));
+const Header =AsyncComponent(() => import('../../components/header'));
+const Category =AsyncComponent(() => import('../category/category'));
+const Product =AsyncComponent(() => import('../product/product'));
+const LeftNav =AsyncComponent(() => import('../../components/left-nav'));
+const Bar =AsyncComponent(() => import('../charts/bar'));
+const Line =AsyncComponent(() => import('../charts/line'));
+const Pie =AsyncComponent(() => import('../charts/pie'));
+const NotFound =AsyncComponent(() => import('../not-found/not-found'));
 
 const { Redirect, Route, Switch } = require('react-router-dom')
 

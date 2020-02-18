@@ -174,7 +174,9 @@
   },
   "proxy": "http://localhost:5001",
   "devDependencies": {
-    "babel-plugin-import": "^1.13.0"
+    "babel-plugin-import": "^1.13.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack-bundle-analyzer": "^3.6.0"
   },
   "homepage": "."
 }
