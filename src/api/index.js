@@ -6,8 +6,9 @@
 基本要求: 能根据接口文档定义接口请求函数
  */
 import { message } from 'antd'
+import jsonp from 'jsonp'
 import ajax from './ajax'
-import { MUTI_REQ, FORM_REQ,BASE } from '../utils/constants'
+import { MUTI_REQ, FORM_REQ, BASE } from '../utils/constants'
 
 // const BASE = 'http://localhost:5000'
 // 登陆
@@ -23,10 +24,10 @@ export const reqMenus = (roleId) => ajax(BASE + '/menus', { roleId }, 'GET')
 export const reqCategorys = (parentId) => ajax(BASE + '/categories', { parentId })
 
 // 添加分类
-export const reqAddCategory = (name, parentId) => ajax(BASE + 'category', { name, parentId }, 'POST')
+export const reqAddCategory = (name, parentId) => ajax(BASE + '/category', { name, parentId }, 'POST')
 
 // 更新分类
-export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + 'category', { id: categoryId, name: categoryName }, 'PUT')
+export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + '/category', { id: categoryId, name: categoryName }, 'PUT')
 
 // 获取一个分类
 export const reqCategory = (categoryId) => ajax(BASE + '/category', { categoryId })
@@ -43,7 +44,7 @@ export const reqUpdateStatus = (productId, status) => ajax(BASE + '/product/upda
 export const uploadImg = (data) => ajax(BASE + '/img/upload', data, 'POST', MUTI_REQ)
 
 // 删除指定名称的图片
-export const reqDeleteImg = (name) => ajax(BASE + '/img/delete', { name }, 'POST',FORM_REQ)
+export const reqDeleteImg = (name) => ajax(BASE + '/img/delete', { name }, 'POST', FORM_REQ)
 // 商品API==================================================================================================================
 // 根据Id获取商品
 export const reqProduct = (productId) => ajax(BASE + '/product', { productId })
@@ -75,7 +76,7 @@ export const reqUpdateRole = (roleId, menuKeys) => ajax(BASE + '/role', { id: ro
 // 获取所有用户的列表
 export const reqUsers = (pagination) => ajax(BASE + '/users', { page: pagination.current, size: pagination.pageSize })
 // 删除指定用户
-export const reqDeleteUser = (userId) => ajax(BASE + '/user', { id:userId }, 'DELETE')
+export const reqDeleteUser = (userId) => ajax(BASE + '/user', { id: userId }, 'DELETE')
 // 添加用户
 export const reqAddUser = (user) => ajax(BASE + '/user', user, 'POST')
 // 更新用户
@@ -84,21 +85,29 @@ export const reqUpdateUser = (user) => ajax(BASE + '/user', user, 'PUT')
 /*
 json请求的接口请求函数
  */
-export const reqWeather = async (cityId) =>
-  ajax(BASE + '/weather', { cityId }, 'GET')
-    .then(await (data => {
+
+
+export const reqWeather = (cityId) => {
+
+  return new Promise((resolve, reject) => {
+    // const url = `http://api.map.baidu.com/telematics/v3/weather?location='杭州'&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
+    const url = 'http://localhost:5001/ra/weather?cityId='+cityId
+    // 发送jsonp请求
+    jsonp(url, {}, (err, data) => {
+      console.log('jsonp()', err, data)
       // 如果成功了
-      if (data.status === 0 && data.data.status === 200) {
+      if (data.status === 200 ) {
         // 取出需要的数据
-        return data.data.data
+        resolve(data.data)
       } else {
         // 如果失败了
-        message.error('获取天气信息失败!')
-      }
+        message.error('获取天气信息失败!');
 
+      }
     })
-    )
-// reqWeather('杭州')
+  })
+}
+
 /*
 jsonp解决ajax跨域的原理
   1). jsonp只能解决GET类型的ajax请求跨域问题
