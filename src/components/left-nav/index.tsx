@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { Menu, Icon } from 'antd'
 import MenuModel from '../../models/menu'
 import User from '../../models/user'

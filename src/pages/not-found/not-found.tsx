@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Button, Row, Col } from 'antd'
 
 import { setHeadTitle } from '../../redux/actions'

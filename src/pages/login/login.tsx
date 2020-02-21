@@ -68,7 +68,6 @@ const Login = (props: FormTypes) => {
        4). 必须是英文、数字或下划线组成
       */
     const validatePwd = (rule: any, value: string, callback: Function) => {
-        console.log('validatePwd()', rule, value)
         if (!value) {
             callback('密码必须输入')
         } else if (value.length < 4) {

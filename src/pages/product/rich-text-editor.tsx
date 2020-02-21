@@ -1,7 +1,7 @@
 /*
 用来指定商品详情的富文本编辑器组件
  */
-import React, { useState, useEffect, useContext, memo, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useContext, memo, useCallback } from 'react'
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import {ProductContext} from './product';

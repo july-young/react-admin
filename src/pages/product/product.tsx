@@ -6,7 +6,6 @@ import ProductAddUpdate from './add-update'
 import ProductDetail from './detail'
 
 import './product.less'
-import ProductModel from '../../models/product'
 
 const { Switch, Route, Redirect } = require('react-router-dom')
 

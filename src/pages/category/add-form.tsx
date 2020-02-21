@@ -42,7 +42,7 @@ const AddForm =(props:AddFormProps)=> {
               <Select>
                 <Option value='0'>一级分类</Option>
                 {
-                  categorys.map(c => <Option value={c._id}>{c.name}</Option>)
+                  categorys.map(c => <Option key={c._id} value={c._id}>{c.name}</Option>)
                 }
               </Select>
             )

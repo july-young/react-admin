@@ -94,7 +94,6 @@ export const reqWeather = (cityId) => {
     const url = 'http://localhost:5001/ra/weather?cityId='+cityId
     // 发送jsonp请求
     jsonp(url, {}, (err, data) => {
-      console.log('jsonp()', err, data)
       // 如果成功了
       if (data.status === 200 ) {
         // 取出需要的数据
@@ -102,7 +101,6 @@ export const reqWeather = (cityId) => {
       } else {
         // 如果失败了
         message.error('获取天气信息失败!');
-
       }
     })
   })

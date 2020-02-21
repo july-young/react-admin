@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Card,
     Select,
@@ -97,10 +97,10 @@ const ProductHome = (props: ProductHomeProps) => {
     /*
     显示商品详情界面
      */
-    const showDetail = (prodcut: ProductModel) => {
+    const showDetail = (product: ProductModel) => {
         // 缓存product对象 ==> 给detail组件使用
-        memoryUtils.product = prodcut
-        props.history.push('/product/detail')
+        memoryUtils.product = product
+        props.history.push('/product/detail' + '/' + product._id)
     }
 
     /*
@@ -108,8 +108,8 @@ const ProductHome = (props: ProductHomeProps) => {
      */
     const showUpdate = (product: ProductModel) => {
         // 缓存product对象 ==> 给detail组件使用
-        memoryUtils.product=product;
-        props.history.push('/product/update'+'/'+product._id)
+        memoryUtils.product = product;
+        props.history.push('/product/update' + '/' + product._id)
     }
 
     /*
@@ -131,7 +131,7 @@ const ProductHome = (props: ProductHomeProps) => {
         if (result.status === 0) {
             // 取出分页数据, 更新状态, 显示分页列表
             const { total, list } = result.data
-            setTotal( parseInt(total));
+            setTotal(parseInt(total));
             setProducts(list.map((x: any) => converter2Product.toProduct(x)));
         }
     }
@@ -180,22 +180,22 @@ const ProductHome = (props: ProductHomeProps) => {
     )
 
     return (
-            <Card title={title} extra={extra}>
-                <Table
-                    bordered
-                    rowKey='_id'
-                    loading={loading}
-                    dataSource={products}
-                    columns={columns}
-                    pagination={{
-                        current: pageNum,
-                        total,
-                        defaultPageSize: PAGE_SIZE,
-                        showQuickJumper: true,
-                        onChange: getProducts
-                    }}
-                />
-            </Card>
+        <Card title={title} extra={extra}>
+            <Table
+                bordered
+                rowKey='_id'
+                loading={loading}
+                dataSource={products}
+                columns={columns}
+                pagination={{
+                    current: pageNum,
+                    total,
+                    defaultPageSize: PAGE_SIZE,
+                    showQuickJumper: true,
+                    onChange: getProducts
+                }}
+            />
+        </Card>
     )
 }
 

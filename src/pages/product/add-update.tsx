@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, createContext, useReducer, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useContext, useCallback } from 'react'
 import {
     Card,
     Icon,
@@ -12,12 +12,12 @@ import {
 import PicturesWall from './pictures-wall'
 import RichTextEditor from './rich-text-editor'
 import LinkButton from '../../components/link-button'
-import { reqCategorys, reqAddProduct, reqProduct, reqCategory, reqCategoryParents, reqCategoryTree, reqUpdateProduct } from '../../api'
+import { reqCategorys, reqAddProduct, reqProduct, reqCategoryParents, reqCategoryTree, reqUpdateProduct } from '../../api'
 import CategoryModel from '../../models/category'
 import ProductModel from '../../models/product'
 import productConverter from '../../converter/converter2Product'
 
-import { ProductContext, ProductReducer } from './product';
+import { ProductContext } from './product';
 
 import converter2Product from '../../converter/converter2Product'
 import converter2Category from '../../converter/converter2Category'

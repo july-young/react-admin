@@ -6,7 +6,6 @@ import {
 } from 'antd'
 import UserModel from '../../models/user'
 import { reqRoles } from '../../api'
-import converter2Role from '../../converter/converter2Role'
 
 
 const Item = Form.Item

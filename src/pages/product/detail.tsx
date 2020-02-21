@@ -1,68 +1,84 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useContext, useCallback } from 'react'
 import {
     Card,
     Icon,
-    List
+    Form,
+    Input,
+    Cascader,
+    List,
+    message
 } from 'antd'
 
+import PicturesWall from './pictures-wall'
+import RichTextEditor from './rich-text-editor'
 import LinkButton from '../../components/link-button'
-import { BASE_IMG_URL } from '../../utils/constants'
-import { reqCategory } from '../../api'
-import memoryUtils from "../../utils/memoryUtils";
+import { reqCategorys, reqAddProduct, reqProduct, reqCategoryParents, reqCategoryTree, reqUpdateProduct } from '../../api'
+import CategoryModel from '../../models/category'
 import ProductModel from '../../models/product'
+import productConverter from '../../converter/converter2Product'
+import { BASE_IMG_URL } from '../../utils/constants'
+import { ProductContext } from './product';
 
-const Item = List.Item
+import converter2Product from '../../converter/converter2Product'
+import converter2Category from '../../converter/converter2Category'
+
+const { Item } = Form;
 
 interface ProductDetailProps {
     history: any;
     name: string;
     desc: string;
     price: string;
-    imgs: Array<any>;
-    detail: string;
+    location: any;
+    form: any;
 }
 /*
 Product的详情子路由组件
  */
 const ProductDetail = (props: ProductDetailProps) => {
-    // 一级分类名称
-    const [cName1, setCName1] = useState('');
-    // 二级分类名称
-    const [cName2, setCName2] = useState('');
+
+    const [product, setProduct] = useState(new ProductModel());
+    const [categoryNames, setCategoryNames] = useState('');
 
     useEffect(() => {
-        init();
-    });
+        const path: string = props.location.pathname;
 
-    const init = async () => {
-        if (memoryUtils.product) {
-            // 得到当前商品的分类ID
-            const { pCategoryId, categoryId } = memoryUtils.product!;
-
-            if (pCategoryId === '0') { // 一级分类下的商品
-                const result = await reqCategory(categoryId)
-                const cName1 = result.data.name
-                setCName1(cName1);
-            } else if (!pCategoryId) { // 二级分类下的商品
-                // 一次性发送多个请求, 只有都成功了, 才正常处理
-                const results = await Promise.all([reqCategory(pCategoryId), reqCategory(categoryId)])
-                const cName1 = results[0].data.name
-                const cName2 = results[1].data.name
-                setCName1(cName1);
-                setCName2(cName2);
-            }
+        if (path.indexOf('detail') > -1) {
+            const productId = path.slice((path.lastIndexOf('/') + 1));
+            getProduct(productId);
         }
-    }
+    }, []);
 
     /*
-    在卸载之前清除保存的数据
-    */
-    useEffect(() => {
-        return () => {
-            memoryUtils.product = new ProductModel();
-        }
-    })
+    async函数的返回值是一个新的promise对象, promise的结果和值由async的结果来决定
+     */
+    const getProduct = useCallback(async (productId: string) => {
+        const result = await reqProduct(productId)   // {status: 0, data: categorys}
+        if (result.status === 0 && result.data) {
+            const productChosen = converter2Product.toProduct(result.data)
+            setProduct(productChosen);
 
+            const res = await reqCategoryParents(productChosen.categoryId);
+
+            if(res.status===0){
+                const categorys = res.data;
+                const names =categorys.map((item:any)=>{
+                    return item.name;
+                })
+                setCategoryNames(names.join('--->'))                
+
+            }
+        }
+    }, [])
+
+
+    // 指定Item布局的配置对象
+    const formItemLayout = {
+        labelCol: { span: 2 },  // 左侧label的宽度
+        wrapperCol: { span: 8 }, // 右侧包裹的宽度
+    }
+
+    // 头部左侧标题
     const title = (
         <span>
             <LinkButton>
@@ -81,25 +97,25 @@ const ProductDetail = (props: ProductDetailProps) => {
             <List>
                 <Item>
                     <span className="left">商品名称:</span>
-                    <span>{props.name}</span>
+                    <span>{product.name}</span>
                 </Item>
                 <Item>
                     <span className="left">商品描述:</span>
-                    <span>{props.desc}</span>
+                    <span>{product.desc}</span>
                 </Item>
                 <Item>
                     <span className="left">商品价格:</span>
-                    <span>{props.price}元</span>
+                    <span>{product.price}元</span>
                 </Item>
                 <Item>
                     <span className="left">所属分类:</span>
-                    <span>{cName1} {cName2 ? ' --> ' + cName2 : ''}</span>
+                    <span>{categoryNames}</span>
                 </Item>
                 <Item>
                     <span className="left">商品图片:</span>
                     <span>
                         {
-                            props.imgs.map(img => (
+                            product.imgs.map(img => (
                                 <img
                                     key={img}
                                     src={BASE_IMG_URL + img}
@@ -112,7 +128,7 @@ const ProductDetail = (props: ProductDetailProps) => {
                 </Item>
                 <Item>
                     <span className="left">商品详情:</span>
-                    <span dangerouslySetInnerHTML={{ __html: props.detail }}>
+                    <span dangerouslySetInnerHTML={{ __html: product.detail }}>
                     </span>
                 </Item>
 

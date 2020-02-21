@@ -13,7 +13,6 @@ import { reqCategorys, reqUpdateCategory, reqAddCategory } from '../../api'
 import AddForm from './add-form'
 import UpdateForm from './update-form'
 import CategoryModel from '../../models/category'
-import { FormComponentProps } from 'antd/lib/form'
 import converter2Category from '../../converter/converter2Category'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 const { connect } = require('react-redux')

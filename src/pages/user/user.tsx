@@ -8,10 +8,9 @@ import {
 } from 'antd'
 import { formateDate } from "../../utils/dateUtils"
 import LinkButton from "../../components/link-button/index"
-import { reqDeleteUser, reqUsers, reqAddUser, reqUpdateUser, reqRoles } from "../../api/index";
+import { reqDeleteUser, reqUsers, reqAddUser, reqUpdateUser } from "../../api/index";
 import UserForm from './user-form'
 import UserModel from '../../models/user'
-import RoleModel from '../../models/role';
 import { PaginationConfig } from 'antd/lib/table';
 import converter2User from '../../converter/converter2User';
 
@@ -23,7 +22,6 @@ interface UserProps {
 const User = (props: UserProps) => {
 
     const [columns, setColumns] = useState(Array());
-    const [roleNames, setRoleNames] = useState<any>({});
     // 选中的用户
     const [user, setUser] = useState();
     // 所有用户列表

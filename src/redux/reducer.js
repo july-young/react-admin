@@ -8,11 +8,9 @@ import {
   RESET_USER,
   REQ_MENU_LIST
 } from './action-types'
-import { reqMenuTree } from '../api/index'
 
 import storageUtils from "../utils/storageUtils"
 
-import { resolve } from 'path'
 const initHeadTitle = ''
 
 function headTitle(state = initHeadTitle, action) {
